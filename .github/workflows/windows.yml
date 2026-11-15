@@ -36,7 +36,7 @@ jobs:
           $hash = (Get-FileHash wgnt.zip -Algorithm SHA256).Hash.ToLower()
           if ($hash -ne 'dceb30a9bc4be48cce0f74160fc88a585a2c2627366e8f846fc6658f9038dace') { throw "SHA256 mismatch: $hash" }
           tar -xf wgnt.zip
-          copy wireguard-nt-1.1\bin\amd64\wireguard.dll windows\libs\wireguard.dll
+          copy wireguard-nt\bin\amd64\wireguard.dll windows\libs\wireguard.dll
 
       - name: Run unit tests
         run: dotnet test windows/tests/BlockVPN.Tests/BlockVPN.Tests.csproj -c Release --logger "console;verbosity=normal"
