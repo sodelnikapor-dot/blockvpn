@@ -24,10 +24,11 @@ jobs:
         run: |
           git clone --depth 1 https://git.zx2c4.com/wireguard-windows wg-src
           cd wg-src\embeddable-dll-service
-          build.bat
-          cd ..\..
-          mkdir windows\libs
-          copy wg-src\embeddable-dll-service\amd64\tunnel.dll windows\libs\tunnel.dll
+          call build.bat || exit /b 1
+          cd /d %GITHUB_WORKSPACE%
+          if not exist windows\libs mkdir windows\libs
+          copy /y wg-src\embeddable-dll-service\amd64\tunnel.dll windows\libs\tunnel.dll || exit /b 1
+          dir windows\libs
 
       - name: Download wireguard.dll (official wireguard-nt 1.1, SHA256 verified)
         shell: pwsh
