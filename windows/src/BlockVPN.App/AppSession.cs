@@ -13,6 +13,7 @@ namespace BlockVPN.App
         public static List<VpnProfile> Profiles { get; private set; } = new List<VpnProfile>();
 
         public static event Action ProfilesChanged;
+        public static event Action PrefsChanged;
 
         public static void Init()
         {
@@ -36,6 +37,7 @@ namespace BlockVPN.App
         public static void SavePrefs()
         {
             Prefs.Save();
+            PrefsChanged?.Invoke();
         }
     }
 }

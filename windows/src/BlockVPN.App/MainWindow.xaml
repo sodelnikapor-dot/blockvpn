@@ -12,6 +12,42 @@
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
+    <!-- Фон темы: градиент + неоновые пятна в цветах сцены (чистый декор) -->
+    <Border Grid.ColumnSpan="2" IsHitTestVisible="False">
+      <Border.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0.7,1">
+          <GradientStop x:Name="BgStop1" Color="#0B0B10" Offset="0"/>
+          <GradientStop x:Name="BgStop2" Color="#050507" Offset="1"/>
+        </LinearGradientBrush>
+      </Border.Background>
+    </Border>
+    <Ellipse x:Name="BgGlow1" Grid.ColumnSpan="2" Width="460" Height="460"
+             HorizontalAlignment="Left" VerticalAlignment="Top" Margin="-140,-160,0,0"
+             IsHitTestVisible="False">
+      <Ellipse.Fill>
+        <RadialGradientBrush>
+          <GradientStop x:Name="GlowStop1" Color="#1439FF14" Offset="0"/>
+          <GradientStop Color="#0039FF14" Offset="1"/>
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+      <Ellipse.Effect>
+        <BlurEffect Radius="70"/>
+      </Ellipse.Effect>
+    </Ellipse>
+    <Ellipse x:Name="BgGlow2" Grid.ColumnSpan="2" Width="520" Height="520"
+             HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,-160,-180"
+             IsHitTestVisible="False">
+      <Ellipse.Fill>
+        <RadialGradientBrush>
+          <GradientStop x:Name="GlowStop2" Color="#10FFD600" Offset="0"/>
+          <GradientStop Color="#00FFD600" Offset="1"/>
+        </RadialGradientBrush>
+      </Ellipse.Fill>
+      <Ellipse.Effect>
+        <BlurEffect Radius="80"/>
+      </Ellipse.Effect>
+    </Ellipse>
+
     <Border Grid.Column="0" Background="{DynamicResource PanelBrush}">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="18,22,10,26">

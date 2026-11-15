@@ -2,6 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Effects;
 using System.Windows.Threading;
 using BlockVPN.Core;
@@ -17,6 +18,7 @@ namespace BlockVPN.App.Views
         private TimeSpan? _lastSession;
         private ulong _lastRx, _lastTx;
         private DateTime? _lastHandshake;
+        private SolidColorBrush _strokeBrush = new SolidColorBrush(Color.FromRgb(0x8A, 0x8A, 0x95));
 
         public MainView()
         {
@@ -29,8 +31,20 @@ namespace BlockVPN.App.Views
             mgr.StatsUpdated += OnStatsUpdated;
 
             AppSession.ProfilesChanged += RefreshProfileInfo;
+            AppSession.PrefsChanged += OnPrefsChanged;
             Loaded += (s, e) => { RefreshProfileInfo(); ApplyState(mgr.State, mgr.LastError); };
         }
+
+        private void OnPrefsChanged()
+        {
+            Dispatcher.BeginInvoke(() =>
+            {
+                RefreshProfileInfo();
+                ApplyState(AppSession.Manager.State, AppSession.Manager.LastError);
+            });
+        }
+
+        private bool AnimationsEnabled => AppSession.Prefs == null || AppSession.Prefs.Animations;
 
         private void OnStateChanged(VpnState state, string message)
         {
@@ -85,17 +99,114 @@ namespace BlockVPN.App.Views
                     stroke = neutral; title = "ОТКЛЮЧЕНО"; glowOpacity = 0; break;
             }
 
-            StatusEllipse.Stroke = new SolidColorBrush(stroke);
+            SetStrokeSmooth(stroke);
             Glow.Color = stroke;
-            Glow.Opacity = glowOpacity;
+            AnimateGlow(glowOpacity);
             StateText.Text = title;
             SubStateText.Text = message ?? "";
 
             ErrorText.Visibility = state == VpnState.Error ? Visibility.Visible : Visibility.Collapsed;
             ErrorText.Text = state == VpnState.Error ? (message ?? "Неизвестная ошибка") : "";
 
+            Rapper.SetSecuredGlow(state == VpnState.Secured);
+            UpdateFlair(state);
             RenderTag();
             ApplyButtonState(state);
+        }
+
+        /// <summary>Цвет кольца статуса меняется плавно (ColorAnimation), если анимации включены.</summary>
+        private void SetStrokeSmooth(Color target)
+        {
+            var from = _strokeBrush.Color;
+            var brush = new SolidColorBrush(from);
+            StatusEllipse.Stroke = brush;
+            _strokeBrush = brush;
+
+            if (AnimationsEnabled && from != target)
+            {
+                brush.BeginAnimation(SolidColorBrush.ColorProperty,
+                    new ColorAnimation(target, TimeSpan.FromMilliseconds(450))
+                    {
+                        EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+                    });
+            }
+            else
+            {
+                brush.Color = target;
+            }
+        }
+
+        /// <summary>Неоновая подсветка кольца нарастает и гаснет плавно.</summary>
+        private void AnimateGlow(double target)
+        {
+            if (AnimationsEnabled)
+            {
+                Glow.BeginAnimation(DropShadowEffect.OpacityProperty,
+                    new DoubleAnimation(target, TimeSpan.FromMilliseconds(450))
+                    {
+                        EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+                    });
+            }
+            else
+            {
+                Glow.BeginAnimation(DropShadowEffect.OpacityProperty, null);
+                Glow.Opacity = target;
+            }
+        }
+
+        /// <summary>Фишка темы на кнопке: своя эмблема сцены у каждой темы.
+        /// Пульсирует при подключении, вспыхивает при «Защищено».</summary>
+        private void UpdateFlair(VpnState state)
+        {
+            ButtonFlair.Text = ThemeManager.CurrentFlairEmoji;
+            ButtonFlair.ToolTip = "Фишка темы: " + ThemeManager.CurrentFlairName;
+
+            FlairScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+            FlairScale.BeginAnimation(ScaleTransform.ScaleYProperty, null);
+            FlairScale.ScaleX = 1;
+            FlairScale.ScaleY = 1;
+            if (!AnimationsEnabled) return;
+
+            if (state == VpnState.Connecting || state == VpnState.Reconnecting)
+            {
+                var pulse = new DoubleAnimation(1, 1.25, TimeSpan.FromMilliseconds(500))
+                {
+                    AutoReverse = true,
+                    RepeatBehavior = RepeatBehavior.Forever,
+                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseInOut }
+                };
+                FlairScale.BeginAnimation(ScaleTransform.ScaleXProperty, pulse);
+                FlairScale.BeginAnimation(ScaleTransform.ScaleYProperty, pulse);
+            }
+            else if (state == VpnState.Secured)
+            {
+                var pop = new DoubleAnimation(1, 1.45, TimeSpan.FromMilliseconds(180))
+                {
+                    AutoReverse = true,
+                    EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut }
+                };
+                FlairScale.BeginAnimation(ScaleTransform.ScaleXProperty, pop);
+                FlairScale.BeginAnimation(ScaleTransform.ScaleYProperty, pop);
+            }
+        }
+
+        /// <summary>Неоновая подсветка кнопки в цвет текущей темы.</summary>
+        private void UpdateButtonGlow()
+        {
+            if (MainButton.IsEnabled)
+            {
+                MainButton.Effect = new DropShadowEffect
+                {
+                    Color = ThemeManager.CurrentAccent,
+                    BlurRadius = 24,
+                    ShadowDepth = 0,
+                    Opacity = 0.45
+                };
+            }
+            else
+            {
+                MainButton.Effect = null;
+            }
         }
 
         private void ApplyButtonState(VpnState state)
@@ -104,15 +215,16 @@ namespace BlockVPN.App.Views
             switch (state)
             {
                 case VpnState.Secured:
-                    MainButton.Content = "ОТКЛЮЧИТЬ"; MainButton.IsEnabled = true; RetryButton.Visibility = Visibility.Collapsed; break;
+                    ButtonText.Text = "ОТКЛЮЧИТЬ"; MainButton.IsEnabled = true; RetryButton.Visibility = Visibility.Collapsed; break;
                 case VpnState.Connecting:
                 case VpnState.Reconnecting:
-                    MainButton.Content = "ОТМЕНИТЬ"; MainButton.IsEnabled = true; RetryButton.Visibility = Visibility.Collapsed; break;
+                    ButtonText.Text = "ОТМЕНИТЬ"; MainButton.IsEnabled = true; RetryButton.Visibility = Visibility.Collapsed; break;
                 case VpnState.Error:
-                    MainButton.Content = "ОТКЛЮЧЕНО"; MainButton.IsEnabled = false; RetryButton.Visibility = Visibility.Visible; break;
+                    ButtonText.Text = "ОТКЛЮЧЕНО"; MainButton.IsEnabled = false; RetryButton.Visibility = Visibility.Visible; break;
                 default:
-                    MainButton.Content = "ПОДКЛЮЧИТЬ"; MainButton.IsEnabled = profile != null; RetryButton.Visibility = Visibility.Collapsed; break;
+                    ButtonText.Text = "ПОДКЛЮЧИТЬ"; MainButton.IsEnabled = profile != null; RetryButton.Visibility = Visibility.Collapsed; break;
             }
+            UpdateButtonGlow();
         }
 
         private void MainButton_Click(object sender, RoutedEventArgs e)
@@ -141,6 +253,9 @@ namespace BlockVPN.App.Views
             var prefs = AppSession.Prefs;
             bool decor = prefs.Decor;
             TagSticker.Visibility = decor ? Visibility.Visible : Visibility.Collapsed;
+            Rapper.Visibility = decor ? Visibility.Visible : Visibility.Collapsed;
+            if (!prefs.Animations) Rapper.StopAll();
+            else Rapper.RefreshAnimationState();
             if (!decor) return;
             bool glow = AppSession.Manager.State == VpnState.Secured;
             TagRender.Configure(TagSticker, prefs.TagText, prefs.TagColorIndex, prefs.TagStyleIndex, glow, prefs.Animations);

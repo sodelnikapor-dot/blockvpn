@@ -1,6 +1,7 @@
 <UserControl x:Class="BlockVPN.App.Views.MainView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:BlockVPN.App.Views">
   <Grid Margin="28,20,28,16">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -26,21 +27,31 @@
       <Border x:Name="TagSticker" Grid.Column="1" VerticalAlignment="Top" Margin="0,0,0,10"/>
     </Grid>
 
-    <!-- Ряд 1: статус-круг -->
-    <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <Ellipse x:Name="StatusEllipse" Width="230" Height="230" StrokeThickness="6" Stroke="{DynamicResource DimBrush}">
-        <Ellipse.Effect>
-          <DropShadowEffect x:Name="Glow" BlurRadius="36" ShadowDepth="0" Opacity="0"/>
-        </Ellipse.Effect>
-      </Ellipse>
-      <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-        <TextBlock x:Name="StateText" Text="ОТКЛЮЧЕНО" FontFamily="Segoe UI Black" FontSize="33"
-                   Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center"/>
-        <TextBlock x:Name="SubStateText" Text="" FontSize="14" Foreground="{DynamicResource DimBrush}"
-                   HorizontalAlignment="Center" Margin="0,8,0,0" TextWrapping="Wrap" MaxWidth="380" TextAlignment="Center"/>
-        <TextBlock x:Name="ProfileText" Text="Сервер не выбран" FontSize="15" Foreground="{DynamicResource Accent2Brush}"
-                   HorizontalAlignment="Center" Margin="0,10,0,0"/>
-      </StackPanel>
+    <!-- Ряд 1: статус-круг + маскот -->
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Ellipse x:Name="StatusEllipse" Width="230" Height="230" StrokeThickness="6" Stroke="{DynamicResource DimBrush}">
+          <Ellipse.Effect>
+            <DropShadowEffect x:Name="Glow" BlurRadius="36" ShadowDepth="0" Opacity="0"/>
+          </Ellipse.Effect>
+        </Ellipse>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+          <TextBlock x:Name="StateText" Text="ОТКЛЮЧЕНО" FontFamily="Segoe UI Black" FontSize="33"
+                     Foreground="{DynamicResource TextBrush}" HorizontalAlignment="Center"/>
+          <TextBlock x:Name="SubStateText" Text="" FontSize="14" Foreground="{DynamicResource DimBrush}"
+                     HorizontalAlignment="Center" Margin="0,8,0,0" TextWrapping="Wrap" MaxWidth="380" TextAlignment="Center"/>
+          <TextBlock x:Name="ProfileText" Text="Сервер не выбран" FontSize="15" Foreground="{DynamicResource Accent2Brush}"
+                     HorizontalAlignment="Center" Margin="0,10,0,0"/>
+        </StackPanel>
+      </Grid>
+
+      <!-- Маскот: стоит справа, двигается при наведении, светится при «Защищено» -->
+      <views:RapperFigure x:Name="Rapper" Grid.Column="1" VerticalAlignment="Bottom" Margin="6,0,0,12"/>
     </Grid>
 
     <!-- Ряд 2: ошибка -->
@@ -67,9 +78,19 @@
       </StackPanel>
     </UniformGrid>
 
-    <!-- Ряд 4: кнопка -->
+    <!-- Ряд 4: кнопка с фишкой темы -->
     <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,14">
-      <Button x:Name="MainButton" Style="{StaticResource StreetButton}" Content="ПОДКЛЮЧИТЬ" Click="MainButton_Click"/>
+      <Button x:Name="MainButton" Style="{StaticResource ConnectButton}" Click="MainButton_Click">
+        <StackPanel Orientation="Horizontal">
+          <TextBlock x:Name="ButtonFlair" Text="🎤" FontSize="20" Margin="0,0,12,0" VerticalAlignment="Center"
+                     RenderTransformOrigin="0.5,0.5">
+            <TextBlock.RenderTransform>
+              <ScaleTransform x:Name="FlairScale" ScaleX="1" ScaleY="1"/>
+            </TextBlock.RenderTransform>
+          </TextBlock>
+          <TextBlock x:Name="ButtonText" Text="ПОДКЛЮЧИТЬ" VerticalAlignment="Center"/>
+        </StackPanel>
+      </Button>
       <Button x:Name="RetryButton" Style="{StaticResource GhostButton}" Content="ПОВТОРИТЬ" Click="RetryButton_Click"
               Margin="12,0,0,0" Visibility="Collapsed"/>
     </StackPanel>

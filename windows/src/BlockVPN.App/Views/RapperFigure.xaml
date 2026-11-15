@@ -1,0 +1,76 @@
+<UserControl x:Class="BlockVPN.App.Views.RapperFigure"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Cursor="Hand">
+  <!-- Оригинальный маскот BlockVPN: рэпер в худи, кепке и наушниках.
+       Чистый декор: не влияет на VPN, отключается настройкой «декор»,
+       анимируется только при включённых анимациях. -->
+  <Viewbox Width="180" Height="234">
+    <Canvas Width="200" Height="260" Background="Transparent">
+      <Canvas.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform x:Name="FigScale" CenterX="100" CenterY="252" ScaleX="1" ScaleY="1"/>
+          <RotateTransform x:Name="FigRotate" CenterX="100" CenterY="252" Angle="0"/>
+          <TranslateTransform x:Name="FigBob" Y="0"/>
+        </TransformGroup>
+      </Canvas.RenderTransform>
+
+      <!-- тень на земле -->
+      <Ellipse Canvas.Left="42" Canvas.Top="242" Width="116" Height="14" Fill="#33000000"/>
+
+      <!-- ноги / джинсы -->
+      <Rectangle Canvas.Left="60" Canvas.Top="196" Width="36" Height="56" RadiusX="11" Fill="#20202A"/>
+      <Rectangle Canvas.Left="104" Canvas.Top="196" Width="36" Height="56" RadiusX="11" Fill="#20202A"/>
+
+      <!-- кроссовки -->
+      <Rectangle Canvas.Left="52" Canvas.Top="244" Width="50" Height="14" RadiusX="7" Fill="#E8E8E8"/>
+      <Rectangle Canvas.Left="98" Canvas.Top="244" Width="50" Height="14" RadiusX="7" Fill="#E8E8E8"/>
+
+      <!-- тело: худи -->
+      <Rectangle Canvas.Left="36" Canvas.Top="128" Width="128" Height="92" RadiusX="36" Fill="#26262E"/>
+      <!-- карман кенгуру -->
+      <Rectangle Canvas.Left="64" Canvas.Top="182" Width="72" Height="26" RadiusX="11" Fill="#1D1D24"/>
+      <!-- шнурки худи -->
+      <Line X1="90" Y1="150" X2="87" Y2="174" Stroke="{DynamicResource AccentBrush}" StrokeThickness="3" StrokeEndLineCap="Round"/>
+      <Line X1="110" Y1="150" X2="113" Y2="174" Stroke="{DynamicResource AccentBrush}" StrokeThickness="3" StrokeEndLineCap="Round"/>
+
+      <!-- голова (группа для кивка) -->
+      <Canvas x:Name="HeadGroup">
+        <Canvas.RenderTransform>
+          <RotateTransform x:Name="HeadRotate" CenterX="100" CenterY="128" Angle="0"/>
+        </Canvas.RenderTransform>
+
+        <!-- капюшон -->
+        <Ellipse Canvas.Left="50" Canvas.Top="74" Width="100" Height="92" Fill="#2E2E38"/>
+        <!-- лицо -->
+        <Ellipse Canvas.Left="69" Canvas.Top="90" Width="62" Height="66" Fill="#C68642"/>
+        <!-- очки -->
+        <Rectangle Canvas.Left="73" Canvas.Top="108" Width="54" Height="15" RadiusX="7" Fill="#0D0D11"/>
+        <Rectangle Canvas.Left="96" Canvas.Top="110" Width="8" Height="4" Fill="#0D0D11"/>
+        <!-- бородка -->
+        <Path Fill="#1A1A20" Data="M 82,140 Q 100,156 118,140 Q 112,152 100,153 Q 88,152 82,140 Z"/>
+        <!-- кепка: тулья -->
+        <Ellipse Canvas.Left="64" Canvas.Top="78" Width="72" Height="36" Fill="#14141A"/>
+        <!-- кепка: козырёк -->
+        <Rectangle Canvas.Left="94" Canvas.Top="96" Width="56" Height="11" RadiusX="6" Fill="#14141A"/>
+        <!-- мини-лог на кепке -->
+        <Ellipse Canvas.Left="92" Canvas.Top="86" Width="10" Height="10" Fill="{DynamicResource AccentBrush}"/>
+
+        <!-- наушники: дуга -->
+        <Path Stroke="{DynamicResource AccentBrush}" StrokeThickness="7" StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+              Data="M 58,116 C 58,72 142,72 142,116"/>
+        <!-- наушники: чашки -->
+        <Rectangle Canvas.Left="48" Canvas.Top="106" Width="20" Height="30" RadiusX="9" Fill="{DynamicResource AccentBrush}"/>
+        <Rectangle Canvas.Left="132" Canvas.Top="106" Width="20" Height="30" RadiusX="9" Fill="{DynamicResource AccentBrush}"/>
+        <Rectangle Canvas.Left="52" Canvas.Top="111" Width="12" Height="20" RadiusX="6" Fill="#101014"/>
+        <Rectangle Canvas.Left="136" Canvas.Top="111" Width="12" Height="20" RadiusX="6" Fill="#101014"/>
+      </Canvas>
+
+      <!-- цепь с подвеской -->
+      <Path Stroke="{DynamicResource Accent2Brush}" StrokeThickness="4" StrokeDashArray="3 2"
+            Data="M 74,136 C 88,162 112,162 126,136"/>
+      <Ellipse Canvas.Left="93" Canvas.Top="158" Width="15" Height="15" Fill="{DynamicResource Accent2Brush}"/>
+      <TextBlock Canvas.Left="96.5" Canvas.Top="158.5" Text="B" FontFamily="Segoe UI Black" FontSize="10" Foreground="#14141A"/>
+    </Canvas>
+  </Viewbox>
+</UserControl>
