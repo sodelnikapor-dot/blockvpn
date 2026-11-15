@@ -66,7 +66,7 @@ namespace BlockVPN.App
         }
 
         /// <summary>Запуск бесконечного сториборда с одной анимацией на свойстве элемента.</summary>
-        private void Run(DependencyObject target, string path, DoubleAnimation a)
+        private void Run(DependencyObject target, string path, Timeline a)
         {
             Storyboard.SetTarget(a, target);
             Storyboard.SetTargetProperty(a, new PropertyPath(path));
