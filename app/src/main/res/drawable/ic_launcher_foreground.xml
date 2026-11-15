@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- капюшон -->
+    <path
+        android:fillColor="#26262F"
+        android:pathData="M54,28 C39,28 32,41 32,55 L32,74 L76,74 L76,55 C76,41 69,28 54,28 Z" />
+
+    <!-- внутренняя тень капюшона -->
+    <path
+        android:fillColor="#1A1A22"
+        android:pathData="M54,34 C43,34 38,44 38,55 L38,74 L70,74 L70,55 C70,44 65,34 54,34 Z" />
+
+    <!-- дуга наушников -->
+    <path
+        android:pathData="M38,52 C38,40 70,40 70,52"
+        android:strokeColor="#B7F542"
+        android:strokeWidth="3"
+        android:fillColor="#00000000" />
+
+    <!-- чашки наушников -->
+    <path
+        android:fillColor="#B7F542"
+        android:pathData="M38,52 m-4.5,0 a4.5,4.5 0 1,1 9,0 a4.5,4.5 0 1,1 -9,0" />
+    <path
+        android:fillColor="#B7F542"
+        android:pathData="M70,52 m-4.5,0 a4.5,4.5 0 1,1 9,0 a4.5,4.5 0 1,1 -9,0" />
+
+    <!-- визор-маска -->
+    <path
+        android:fillColor="#B7F542"
+        android:pathData="M42,50 L66,50 A3,3 0 0 1 69,53 L69,58 A3,3 0 0 1 66,61 L42,61 A3,3 0 0 1 39,58 L39,53 A3,3 0 0 1 42,50 Z" />
+
+    <!-- глаза-замки на визоре -->
+    <path
+        android:fillColor="#0C0C10"
+        android:pathData="M46,53.5 h5 v4 h-5 z" />
+    <path
+        android:fillColor="#0C0C10"
+        android:pathData="M57,53.5 h5 v4 h-5 z" />
+
+    <!-- граффити-штрих -->
+    <path
+        android:pathData="M30,80 C38,76 44,84 52,80 C60,76 66,84 74,80"
+        android:strokeColor="#7C4DFF"
+        android:strokeWidth="2.5"
+        android:fillColor="#00000000" />
+</vector>
