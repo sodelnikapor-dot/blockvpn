@@ -17,11 +17,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # Android SDK уже предустановлен на ubuntu-latest (ANDROID_HOME),
+      # лицензии приняты — отдельный setup-android не нужен и вызывает
+      # ошибку "Failed to find package 'tools'".
 
       - name: Build debug APK
-        run: gradle assembleDebug --no-daemon || (gradle wrapper --gradle-version 8.2 && ./gradlew assembleDebug --no-daemon)
+        run: ./gradlew assembleDebug --no-daemon || (gradle wrapper --gradle-version 8.2 && ./gradlew assembleDebug --no-daemon)
 
       - name: Run unit tests
         run: (./gradlew testDebugUnitTest --no-daemon) || (gradle testDebugUnitTest --no-daemon)
