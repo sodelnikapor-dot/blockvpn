@@ -49,6 +49,9 @@
       </Ellipse.Effect>
     </Ellipse>
 
+    <!-- Уникальная фоновая анимация активной темы при подключении (чистый декор) -->
+    <Grid x:Name="FxHost" Grid.ColumnSpan="2" IsHitTestVisible="False" ClipToBounds="True"/>
+
     <Border Grid.Column="0" Background="{DynamicResource PanelBrush}">
       <DockPanel>
         <StackPanel DockPanel.Dock="Top" Margin="18,22,10,26">

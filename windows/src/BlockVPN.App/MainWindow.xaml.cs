@@ -4,7 +4,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 using BlockVPN.App.Views;
+using BlockVPN.Core;
 
 namespace BlockVPN.App
 {
@@ -15,6 +17,7 @@ namespace BlockVPN.App
         private readonly TagView _tagView;
         private readonly SettingsView _settingsView;
         private readonly HelpView _helpView;
+        private readonly BackgroundFx _fx;
 
         public MainWindow()
         {
@@ -33,10 +36,17 @@ namespace BlockVPN.App
                 .GetName().Version?.ToString(3) ?? "0.1.0") + " // MVP";
 
             ApplyBackground(animate: false);
+            _fx = new BackgroundFx(FxHost);
             AppSession.PrefsChanged += OnPrefsChanged;
+            AppSession.Manager.StateChanged += OnFxStateChanged;
 
             ContentHost.Content = _mainView;
-            Closed += (s, e) => { AppSession.PrefsChanged -= OnPrefsChanged; AppSession.Manager.ShutdownCleanup(); };
+            Closed += (s, e) =>
+            {
+                AppSession.PrefsChanged -= OnPrefsChanged;
+                AppSession.Manager.StateChanged -= OnFxStateChanged;
+                AppSession.Manager.ShutdownCleanup();
+            };
 
             if (AppSession.Prefs.AutoConnect && !AppSession.Manager.IsActive)
             {
@@ -53,6 +63,24 @@ namespace BlockVPN.App
         private void OnPrefsChanged()
         {
             ApplyBackground(animate: true);
+            UpdateFx();
+        }
+
+        private void OnFxStateChanged(VpnState state, string message)
+        {
+            Dispatcher.BeginInvoke(UpdateFx);
+        }
+
+        /// <summary>Уникальная анимация фона темы: играет при подключении, гаснет при отключении.</summary>
+        private void UpdateFx()
+        {
+            bool decor = AppSession.Prefs == null || AppSession.Prefs.Decor;
+            bool anim = AppSession.Prefs == null || AppSession.Prefs.Animations;
+            var state = AppSession.Manager.State;
+            if (decor && anim && (state == VpnState.Secured || state == VpnState.Connecting || state == VpnState.Reconnecting))
+                _fx.Play(AppSession.Prefs == null ? 0 : AppSession.Prefs.ThemeIndex);
+            else
+                _fx.Stop();
         }
 
         /// <summary>Фон темы: градиент + неоновые пятна. При переключении темы цвета плавно перетекают.</summary>
