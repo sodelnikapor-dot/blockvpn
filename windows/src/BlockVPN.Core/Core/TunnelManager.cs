@@ -26,7 +26,6 @@ namespace BlockVPN.Core
 
         private readonly object _sync = new object();
         private readonly System.Threading.Timer _watch;
-        private int _watching; // Interlock флаг
 
         private DateTime? _connectedAt;
         private DateTime? _lastHandshake;

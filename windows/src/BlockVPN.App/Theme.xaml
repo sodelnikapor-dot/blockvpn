@@ -101,7 +101,6 @@
           <ControlTemplate.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
               <Setter TargetName="bd" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
-              <Setter TargetName="bd" Property="Foreground" Value="{DynamicResource AccentBrush}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
               <Setter TargetName="bd" Property="Opacity" Value="0.3"/>
