@@ -16,7 +16,7 @@
 - CI `windows-build`: tunnel.dll собирается из официальных исходников wireguard-windows,
   wireguard.dll скачивается с download.wireguard.com с проверкой SHA256.
 
-Проверено (CI): сборка и тесты — см. прогон workflow `windows-build`.
+Проверено (CI, прогон 43772841457 — зелёный): tunnel.dll собран из официальных исходников wireguard-windows, wireguard.dll скачан с download.wireguard.com (SHA256 сверён), unit-тесты xUnit прошли, publish self-contained выполнен, артефакт `BlockVPN-windows-x64` загружен.
 НЕ проверено на реальной машине с реальным сервером: установка, UAC, подключение,
 kill switch, автозапуск — см. windows/README.md и docs/TESTING.md.
 
