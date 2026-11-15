@@ -48,3 +48,12 @@ WireGuard-клиент для Android с тёмным «уличным» инт�
 - `docs/TESTING.md` — что проверено и как проверить самому
 - `docs/LIMITATIONS.md` — известные ограничения
 - `CHANGELOG.md` — журнал изменений
+
+## Windows-версия (MVP)
+
+Клиент WireGuard для Windows 10/11 на .NET 8 + WPF, через официальный embeddable `tunnel.dll`
+(wireguard-windows). Тот же уличный стиль, «Мой тег», 3 палитры, диагностика.
+
+- Код: `windows/`
+- Инструкции: [`windows/README.md`](windows/README.md)
+- Сборка и тесты: workflow `windows-build` в Actions (артефакт `BlockVPN-windows-x64`)

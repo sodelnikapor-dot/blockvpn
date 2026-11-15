@@ -1,0 +1,48 @@
+<UserControl x:Class="BlockVPN.App.Views.HelpView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,20,28,16">
+      <TextBlock Text="ПОМОЩЬ" Style="{StaticResource StreetTitle}" Margin="0,0,0,16"/>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ДИАГНОСТИКА" Style="{StaticResource StatLabel}" Margin="0,0,0,10"/>
+          <StackPanel Orientation="Horizontal">
+            <Button Content="ПРОВЕРИТЬ DNS" Style="{StaticResource GhostButton}" Click="DnsCheck_Click"/>
+            <Button Content="ПРОВЕРИТЬ АДАПТЕР" Style="{StaticResource GhostButton}" Margin="10,0,0,0" Click="AdapterCheck_Click"/>
+            <Button Content="СТАТУС СЛУЖБЫ" Style="{StaticResource GhostButton}" Margin="10,0,0,0" Click="ServiceCheck_Click"/>
+            <Button Content="ЖУРНАЛ ТУННЕЛЯ" Style="{StaticResource GhostButton}" Margin="10,0,0,0" Click="LogCheck_Click"/>
+          </StackPanel>
+          <TextBox x:Name="DiagOutput" Style="{StaticResource StreetTextBox}" AcceptsReturn="True" TextWrapping="Wrap"
+                   Height="150" Margin="0,12,0,0" IsReadOnly="True" FontFamily="Consolas" FontSize="12"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <Expander Header="Где взять конфиг сервера?" Foreground="{DynamicResource TextBrush}">
+            <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="12,6,0,4"
+                       Text="Конфиг выдаёт администратор WireGuard-сервера (или ты сам, если поднял сервер по нашей инструкции docs/SERVER_SETUP.md). Это текстовый файл .conf с секциями [Interface] и [Peer]."/>
+          </Expander>
+          <Expander Header="Почему приложение просит права администратора?" Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0">
+            <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="12,6,0,4"
+                       Text="Поднимать системный туннель в Windows может только администратор — так же работает и официальный клиент WireGuard. Без этих прав VPN физически невозможен."/>
+          </Expander>
+          <Expander Header="Подключается, но интернета нет" Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0">
+            <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="12,6,0,4"
+                       Text="1) Проверь в конфиге AllowedIPs = 0.0.0.0/0, ::/0. 2) Проверь DNS-строку в конфиге. 3) Запусти диагностику DNS и журнала выше. 4) Убедись, что сервер живой: ping адреса из Endpoint."/>
+          </Expander>
+          <Expander Header="Ошибка «Нужны права администратора»" Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0">
+            <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="12,6,0,4"
+                       Text="Правый клик по BlockVPN.exe → «Запуск от имени администратора». Либо согласись на запрос UAC при старте."/>
+          </Expander>
+          <Expander Header="Что приложение НЕ делает" Foreground="{DynamicResource TextBrush}" Margin="0,6,0,0">
+            <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="12,6,0,4"
+                       Text="Не собирает историю посещений, не анализирует трафик, не отправляет телеметрию, не меняет системные настройки VPN без твоего действия."/>
+          </Expander>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

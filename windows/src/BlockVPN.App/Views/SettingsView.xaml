@@ -1,0 +1,53 @@
+<UserControl x:Class="BlockVPN.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Margin="28,20,28,16">
+      <TextBlock Text="НАСТРОЙКИ" Style="{StaticResource StreetTitle}" Margin="0,0,0,16"/>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ПАЛИТРА" Style="{StaticResource StatLabel}" Margin="0,0,0,8"/>
+          <ComboBox x:Name="ThemeCombo" Width="240" HorizontalAlignment="Left" SelectionChanged="ThemeCombo_SelectionChanged"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ОФОРМЛЕНИЕ" Style="{StaticResource StatLabel}" Margin="0,0,0,4"/>
+          <CheckBox x:Name="AnimationsCheck" Style="{StaticResource StreetCheck}" Content="Анимации (пульс и свечение)"
+                    Checked="Anim_Changed" Unchecked="Anim_Changed"/>
+          <CheckBox x:Name="DecorCheck" Style="{StaticResource StreetCheck}" Content="Показывать декор (тег, стикеры)"
+                    Checked="Decor_Changed" Unchecked="Decor_Changed"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ПОВЕДЕНИЕ" Style="{StaticResource StatLabel}" Margin="0,0,0,4"/>
+          <CheckBox x:Name="AutoStartCheck" Style="{StaticResource StreetCheck}" Content="Запускать BlockVPN при входе в Windows (появится окно UAC)"
+                    Checked="AutoStart_Changed" Unchecked="AutoStart_Changed"/>
+          <CheckBox x:Name="AutoConnectCheck" Style="{StaticResource StreetCheck}" Content="Автоподключаться к выбранному серверу при старте"
+                    Checked="AutoConnect_Changed" Unchecked="AutoConnect_Changed"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ЗАЩИТА ОТ УТЕЧЕК (KILL SWITCH)" Style="{StaticResource StatLabel}" Margin="0,0,0,6"/>
+          <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap"
+                     Text="В Windows нет единого системного переключателя «блокировать всё без VPN», как на Android. Честный вариант прямо сейчас: настройки брандмауэра Windows — можно заблокировать исходящие соединения для программ, которым нельзя ходить мимо туннеля. Полный kill switch запланирован на следующий этап (правила брандмауэра будут настраиваться автоматически)."/>
+          <Button Content="ОТКРЫТЬ БРАНДМАУЭР WINDOWS" Style="{StaticResource GhostButton}" Margin="0,10,0,0" Click="Firewall_Click"/>
+        </StackPanel>
+      </Border>
+
+      <Border Style="{StaticResource Card}">
+        <StackPanel>
+          <TextBlock Text="ПРИВАТНОСТЬ" Style="{StaticResource StatLabel}" Margin="0,0,0,6"/>
+          <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap"
+                     Text="BlockVPN не собирает историю посещений, не анализирует трафик и не отправляет данные третьим сторонам. Локально хранятся: конфиги серверов (шифруются DPAPI), настройки вида и счётчики подключений. Журнал туннеля — только на этом компьютере, только для диагностики."/>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

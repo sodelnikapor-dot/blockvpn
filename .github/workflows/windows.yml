@@ -1,0 +1,58 @@
+name: windows-build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'windows/**'
+      - '.github/workflows/windows.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build tunnel.dll from official wireguard-windows sources
+        shell: cmd
+        run: |
+          git clone --depth 1 https://git.zx2c4.com/wireguard-windows wg-src
+          cd wg-src\embeddable-dll-service
+          build.bat
+          cd ..\..
+          mkdir windows\libs
+          copy wg-src\embeddable-dll-service\amd64\tunnel.dll windows\libs\tunnel.dll
+
+      - name: Download wireguard.dll (official wireguard-nt 1.1, SHA256 verified)
+        shell: pwsh
+        run: |
+          curl.exe -fLo wgnt.zip https://download.wireguard.com/wireguard-nt/wireguard-nt-1.1.zip
+          $hash = (Get-FileHash wgnt.zip -Algorithm SHA256).Hash.ToLower()
+          if ($hash -ne 'dceb30a9bc4be48cce0f74160fc88a585a2c2627366e8f846fc6658f9038dace') { throw "SHA256 mismatch: $hash" }
+          tar -xf wgnt.zip
+          copy wireguard-nt-1.1\bin\amd64\wireguard.dll windows\libs\wireguard.dll
+
+      - name: Run unit tests
+        run: dotnet test windows/tests/BlockVPN.Tests/BlockVPN.Tests.csproj -c Release --logger "console;verbosity=normal"
+
+      - name: Publish app (self-contained)
+        run: dotnet publish windows/src/BlockVPN.App/BlockVPN.App.csproj -c Release -r win-x64 --self-contained true -o windows/out
+
+      - name: Bundle native libs
+        shell: pwsh
+        run: |
+          copy windows\libs\tunnel.dll windows\out\tunnel.dll
+          copy windows\libs\wireguard.dll windows\out\wireguard.dll
+          Compress-Archive -Path windows\out\* -DestinationPath BlockVPN-windows-x64.zip -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BlockVPN-windows-x64
+          path: BlockVPN-windows-x64.zip

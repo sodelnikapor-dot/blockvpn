@@ -1,0 +1,40 @@
+<UserControl x:Class="BlockVPN.App.Views.TagView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <StackPanel Margin="28,20,28,16">
+    <TextBlock Text="МОЙ ТЕГ" Style="{StaticResource StreetTitle}" Margin="0,0,0,6"/>
+    <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="0,0,0,16"
+               Text="Твой личный граффити-стикер. Живёт локально на этом компьютере, на VPN никак не влияет: только внешний вид главного экрана."/>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="НАДПИСЬ (до 12 символов)" Style="{StaticResource StatLabel}" Margin="0,0,0,6"/>
+        <TextBox x:Name="TagBox" Style="{StaticResource StreetTextBox}" MaxLength="12" Width="260"
+                 HorizontalAlignment="Left" TextChanged="TagBox_TextChanged"/>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="ЦВЕТ" Style="{StaticResource StatLabel}" Margin="0,0,0,8"/>
+        <StackPanel x:Name="ColorRow" Orientation="Horizontal"/>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="СТИЛЬ" Style="{StaticResource StatLabel}" Margin="0,0,0,8"/>
+        <StackPanel x:Name="StyleRow" Orientation="Horizontal"/>
+      </StackPanel>
+    </Border>
+
+    <Border Style="{StaticResource Card}">
+      <StackPanel>
+        <TextBlock Text="ПРЕДПРОСМОТР" Style="{StaticResource StatLabel}" Margin="0,0,0,10"/>
+        <Border x:Name="Preview" HorizontalAlignment="Left" Margin="4,4,4,10"/>
+        <TextBlock x:Name="PreviewHint" Style="{StaticResource DimText}"
+                   Text="На главном экране тег светится, когда VPN подключён, и выглядит нейтрально при отключении."/>
+      </StackPanel>
+    </Border>
+  </StackPanel>
+</UserControl>
