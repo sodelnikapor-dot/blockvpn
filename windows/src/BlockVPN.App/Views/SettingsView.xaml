@@ -48,6 +48,98 @@
                      Text="BlockVPN не собирает историю посещений, не анализирует трафик и не отправляет данные третьим сторонам. Локально хранятся: конфиги серверов (шифруются DPAPI), настройки вида и счётчики подключений. Журнал туннеля — только на этом компьютере, только для диагностики."/>
         </StackPanel>
       </Border>
+
+      <!-- ЕЩЁ: меню как в мобильных VPN-клиентах, в нашей стилистике -->
+      <TextBlock Text="ЕЩЁ" Style="{StaticResource StatLabel}" Margin="0,10,0,8"/>
+
+      <Button Style="{StaticResource MenuRow}" Click="Contact_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="📮" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Связаться с нами"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+
+      <Button Style="{StaticResource MenuRow}" Click="Telegram_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="📢" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Наш канал в Telegram"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+      <TextBlock x:Name="TelegramNote" Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="4,0,0,8"
+                 Visibility="Collapsed"/>
+
+      <Button Style="{StaticResource MenuRow}" Click="Share_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="🔗" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Поделиться приложением"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+      <TextBlock x:Name="ShareNote" Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="4,0,0,8"
+                 Visibility="Collapsed"/>
+
+      <Button Style="{StaticResource MenuRow}" Click="Terms_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="📄" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Условия использования"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+      <Border x:Name="TermsPanel" Visibility="Collapsed" Background="#101014" CornerRadius="10"
+              Padding="12,10" Margin="0,0,0,8">
+        <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap"
+                   Text="BlockVPN — бесплатный open-source клиент WireGuard. Приложение предоставляется «как есть», без гарантий бесперебойной работы. VPN не делает тебя полностью анонимным: сервер, которому ты доверяешь, видит твой IP и трафик. Не используй приложение для незаконных действий. Исходный код: github.com/sodelnikapor-dot/blockvpn"/>
+      </Border>
+
+      <Button Style="{StaticResource MenuRow}" Click="Privacy_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="✅" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Политика конфиденциальности"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+      <Border x:Name="PrivacyPanel" Visibility="Collapsed" Background="#101014" CornerRadius="10"
+              Padding="12,10" Margin="0,0,0,8">
+        <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap"
+                   Text="Мы ничего не собираем: ни историю посещений, ни содержимое трафика, ни аналитику. На компьютере хранятся только твои конфиги серверов (шифрование DPAPI), настройки вида и счётчики подключений. Журнал туннеля остаётся на этом компьютере и нужен только для диагностики. Данные не передаются третьим сторонам."/>
+      </Border>
+
+      <Button Style="{StaticResource MenuRow}" Click="NetTool_Click">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="🧰" FontSize="17" Margin="0,0,12,0"/>
+          <TextBlock Grid.Column="1" Text="Сетевой инструмент"/>
+          <TextBlock Grid.Column="2" Text="›" FontSize="18" Foreground="{DynamicResource DimBrush}"/>
+        </Grid>
+      </Button>
+      <Border x:Name="NetPanel" Visibility="Collapsed" Background="#101014" CornerRadius="10"
+              Padding="12,10" Margin="0,0,0,8">
+        <StackPanel>
+          <TextBlock Style="{StaticResource DimText}" TextWrapping="Wrap"
+                     Text="Быстрая проверка: резолвится ли DNS и виден ли адаптер VPN."/>
+          <Button Content="ПРОВЕРИТЬ" Style="{StaticResource GhostButton}" Margin="0,8,0,0" Click="NetCheck_Click"/>
+          <TextBlock x:Name="NetResult" Style="{StaticResource DimText}" TextWrapping="Wrap" Margin="0,8,0,0"/>
+        </StackPanel>
+      </Border>
     </StackPanel>
   </ScrollViewer>
 </UserControl>

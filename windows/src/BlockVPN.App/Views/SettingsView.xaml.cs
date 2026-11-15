@@ -72,5 +72,67 @@ namespace BlockVPN.App.Views
             }
             catch { }
         }
+
+        // ---------- ЕЩЁ: меню ----------
+
+        private const string RepoUrl = "https://github.com/sodelnikapor-dot/blockvpn";
+        private const string TelegramUrl = ""; // когда создашь канал — впиши сюда ссылку
+
+        private void OpenUrl(string url)
+        {
+            try { Process.Start(new ProcessStartInfo(url) { UseShellExecute = true }); } catch { }
+        }
+
+        private void Contact_Click(object sender, RoutedEventArgs e)
+        {
+            OpenUrl(RepoUrl + "/issues");
+        }
+
+        private void Telegram_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(TelegramUrl))
+            {
+                TelegramNote.Text = "Канал пока не создан. Когда появится — ссылка будет здесь.";
+                TelegramNote.Visibility = Visibility.Visible;
+                return;
+            }
+            OpenUrl(TelegramUrl);
+        }
+
+        private void Share_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Clipboard.SetText(RepoUrl);
+                ShareNote.Text = "Ссылка скопирована: " + RepoUrl;
+            }
+            catch
+            {
+                ShareNote.Text = RepoUrl;
+            }
+            ShareNote.Visibility = Visibility.Visible;
+        }
+
+        private void Terms_Click(object sender, RoutedEventArgs e)
+        {
+            TermsPanel.Visibility = TermsPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void Privacy_Click(object sender, RoutedEventArgs e)
+        {
+            PrivacyPanel.Visibility = PrivacyPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void NetTool_Click(object sender, RoutedEventArgs e)
+        {
+            NetPanel.Visibility = NetPanel.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private async void NetCheck_Click(object sender, RoutedEventArgs e)
+        {
+            NetResult.Text = "Проверяю…";
+            string dns = await System.Threading.Tasks.Task.Run(() => Diagnostics.ResolveHost("one.one.one.one"));
+            NetResult.Text = dns + "\n" + Diagnostics.AdapterStatusText();
+        }
     }
 }
